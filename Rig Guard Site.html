@@ -795,7 +795,6 @@
     <a href="#modes">Modes</a>
     <a href="#architecture">Architecture</a>
     <a href="#kpis">KPIs</a>
-    <a href="#team">Team</a>
   </nav>
   <div class="nav-right">
     <div class="nav-partner">
@@ -937,7 +936,6 @@
     <div class="chip-row">
       <span class="chip">SAP Datasphere</span>
       <span class="chip">SAP Databricks</span>
-      <span class="chip">SAP Build Apps</span>
       <span class="chip">SAP Build Process Automation</span>
       <span class="chip">SAP Analytics Cloud</span>
       <span class="chip">S/4HANA</span>
@@ -1039,10 +1037,9 @@
       <div class="layer btp">
         <div class="lyr-tag">BTP</div>
         <div>
-          <div class="lyr-title">Build Apps · SBPA · SAC</div>
-          <div class="lyr-sub">Joule alert · workflow · analytics</div>
+          <div class="lyr-title">SBPA · SAC</div>
+          <div class="lyr-sub">Workflow · analytics</div>
         </div>
-        <div class="lyr-protocol">OData V4</div>
       </div>
       <div class="layer bdc">
         <div class="lyr-tag">BDC</div>
@@ -1050,7 +1047,6 @@
           <div class="lyr-title">Datasphere + Databricks</div>
           <div class="lyr-sub">Repair context · ML pipeline · prediction staging</div>
         </div>
-        <div class="lyr-protocol">JDBC · Delta Share</div>
       </div>
       <div class="layer">
         <div class="lyr-tag">On-prem</div>
@@ -1058,7 +1054,6 @@
           <div class="lyr-title">S/4HANA · Historian · WMS</div>
           <div class="lyr-sub">EQUI · MARA · AUFK · QMEL · IoT</div>
         </div>
-        <div class="lyr-protocol">ODP · CDS</div>
       </div>
     </div>
   </div>
@@ -1098,7 +1093,7 @@
 <!-- ============== SECTION 8 — Databricks ML ============== -->
 <section class="section" data-scene="databricks">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">08</span>Databricks ML pipeline</div>
+    <div class="eyebrow"><span class="num">08</span>SAP BDC ML pipeline</div>
     <h2 class="h2">Bronze → Silver → Gold → Predict.</h2>
     <p class="lede">XGBoost trained on historical failure patterns; MLflow versions every model; prediction writes back to Datasphere as a particle stream.</p>
     <div class="pipeline">
@@ -1167,8 +1162,8 @@
           <li class="done">
             <div class="sb-num">1</div>
             <div>
-              <div class="sb-title">Build Apps fires alert</div>
-              <div class="sb-sub">Push to Maintenance Lead's device</div>
+              <div class="sb-title">Databricks fires alert</div>
+              <div class="sb-sub">Prediction breach · routed to SBPA</div>
             </div>
           </li>
           <li class="done">
@@ -1243,7 +1238,7 @@
 
         <!-- BTP -->
         <rect x="840" y="50" width="220" height="60" rx="10" fill="rgba(63,200,228,0.08)" stroke="#3FC8E4"/>
-        <text x="860" y="76" fill="#3FC8E4" font-size="10" font-weight="600" letter-spacing="2">BTP · BUILD APPS</text>
+        <text x="860" y="76" fill="#3FC8E4" font-size="10" font-weight="600" letter-spacing="2">BTP · MOBILE</text>
         <text x="860" y="96" fill="#fff" font-size="14" font-weight="600">Joule alert · mobile</text>
 
         <rect x="840" y="200" width="220" height="60" rx="10" fill="rgba(63,200,228,0.08)" stroke="#3FC8E4"/>
@@ -1268,29 +1263,7 @@
           <path class="iflow-line" d="M 840 240 C 540 320 320 200 240 90" stroke="#F59E0B"/>
         </g>
 
-        <!-- chips on lines -->
-        <g font-family="JetBrains Mono" font-size="10">
-          <rect x="290" y="60" width="64" height="20" rx="4" fill="#0A1430" stroke="#1B2F66"/>
-          <text x="298" y="74" fill="#CDD4E4">ODP / CDS</text>
-
-          <rect x="290" y="210" width="64" height="20" rx="4" fill="#0A1430" stroke="#1B2F66"/>
-          <text x="298" y="224" fill="#CDD4E4">JDBC</text>
-
-          <rect x="290" y="360" width="64" height="20" rx="4" fill="#0A1430" stroke="#1B2F66"/>
-          <text x="298" y="374" fill="#CDD4E4">Delta Share</text>
-
-          <rect x="708" y="60" width="68" height="20" rx="4" fill="#0A1430" stroke="#1B2F66"/>
-          <text x="716" y="74" fill="#CDD4E4">OData V4</text>
-
-          <rect x="708" y="210" width="68" height="20" rx="4" fill="#0A1430" stroke="#1B2F66"/>
-          <text x="716" y="224" fill="#CDD4E4">OData V4</text>
-
-          <rect x="708" y="360" width="68" height="20" rx="4" fill="#0A1430" stroke="#1B2F66"/>
-          <text x="716" y="374" fill="#CDD4E4">OData V4</text>
-
-          <rect x="500" y="290" width="100" height="20" rx="4" fill="#0A1430" stroke="#F59E0B"/>
-          <text x="508" y="304" fill="#F59E0B">SBPA → S/4 · OAuth2</text>
-        </g>
+        <!-- protocol chips removed for visual simplicity -->
       </g>
     </svg>
   </div>
@@ -1374,7 +1347,7 @@
           <li>Datasphere replication of EQUI / MARA / AUFK</li>
           <li>Synthetic Bronze→Silver→Gold pipeline</li>
           <li>Single XGBoost model on top-drive bearing wear</li>
-          <li>Mocked Build Apps alert + SBPA stub workflow</li>
+          <li>Mocked mobile alert + SBPA stub workflow</li>
           <li>SAC dashboard with predicted vs actual</li>
         </ul>
       </div>
@@ -1394,52 +1367,10 @@
   </div>
 </section>
 
-<!-- ============== SECTION 14 — Team ============== -->
-<section class="section" id="team" data-scene="team">
-  <div class="section-inner">
-    <div class="eyebrow"><span class="num">14</span>Team & next steps</div>
-    <h2 class="h2">Owners, charters, milestones.</h2>
-    <div class="team-grid">
-      <div class="team-card">
-        <div class="tc-role">Solution architect</div>
-        <div class="tc-name">Amr Shawky</div>
-        <div class="tc-charter">End-to-end architecture across BDC, agent layer, and S/4HANA integration boundaries.</div>
-      </div>
-      <div class="team-card">
-        <div class="tc-role">Data + ML</div>
-        <div class="tc-name">Databricks track</div>
-        <div class="tc-charter">Bronze→Gold pipeline, XGBoost training, MLflow staging, threshold tuning at 85% / 95%.</div>
-      </div>
-      <div class="team-card">
-        <div class="tc-role">Agent layer</div>
-        <div class="tc-name">Build Apps + SBPA track</div>
-        <div class="tc-charter">Joule alert UX, SBPA workflow templates, OAuth2 binding to S/4HANA WO + WMS.</div>
-      </div>
-    </div>
-    <div class="timeline-row">
-      <div class="tl-cell">
-        <div class="tl-tag">Phase 0 · Now → T+5d</div>
-        <div class="tl-title">Track B animations + visual system locked</div>
-        <div class="tl-sub">Hero · HITL · Autonomous · Watch loops</div>
-      </div>
-      <div class="tl-cell">
-        <div class="tl-tag">Phase 1 · T+10d</div>
-        <div class="tl-title">Hack week POC + SAC dashboard</div>
-        <div class="tl-sub">Synthetic data · single asset · stub workflow</div>
-      </div>
-      <div class="tl-cell">
-        <div class="tl-tag">Phase 2 · T+5w</div>
-        <div class="tl-title">Production cut-over with Arabian Drilling</div>
-        <div class="tl-sub">Live S/4 · multi-asset · audit & retrain</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== SECTION 15 — Summary & Impact ============== -->
+<!-- ============== SECTION 14 — Summary & Impact ============== -->
 <section class="section" id="summary" data-scene="summary">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">15</span>Summary & impact</div>
+    <div class="eyebrow"><span class="num">14</span>Summary & impact</div>
     <h2 class="h2">Reactive telemetry.<br><span class="grad">Autonomous execution.</span></h2>
     <p class="lede">Rig-Guard automates the end-to-end maintenance lifecycle, transforming reactive telemetry into proactive, autonomous SAP S/4HANA execution.</p>
     <div class="grid-3 impact-row" style="margin-top: 32px;">

@@ -171,12 +171,11 @@
     kpis:        { p: [6, 3.5, 8],   l: [0, 2.3, 0] },  // frame KPIs at base
     gtm:         { p: [-6, 4, 9],    l: [0, 2.6, 0] },  // partner-side wide
     scope:       { p: [-8, 5, 8],    l: [0, 2.6, 0] },  // side
-    team:        { p: [9, 5.5, 9],   l: [0, 2.7, 0] },  // final hero-ish
     summary:     { p: [0, 7, 11],    l: [0, 3, 0] },    // ceremonial pull-back
     cta:         { p: [8, 5, 9],     l: [0, 2.4, 0] },  // rest
   };
 
-  const SCENE_LIST = ['hero','crisis','gap','meet','loop','modes','flywheel','datasphere','databricks','agentic','integration','kpis','gtm','scope','team','summary','cta'];
+  const SCENE_LIST = ['hero','crisis','gap','meet','loop','modes','flywheel','datasphere','databricks','agentic','integration','kpis','gtm','scope','summary','cta'];
 
   // build scroll rail
   const rail = document.getElementById('scrollRail');
@@ -227,7 +226,7 @@
       targetCam.l.set(...cam.l);
       // update nav active
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-      const navMap = { problem:['crisis','gap'], loop:['loop'], modes:['modes'], architecture:['flywheel','datasphere','databricks','agentic','integration'], kpis:['kpis','gtm','scope'], team:['team','summary','cta'] };
+      const navMap = { problem:['crisis','gap'], loop:['loop'], modes:['modes'], architecture:['flywheel','datasphere','databricks','agentic','integration'], kpis:['kpis','gtm','scope','summary','cta'] };
       Object.entries(navMap).forEach(([href, scenes]) => {
         if (scenes.includes(scene)) {
           const a = document.querySelector(`.nav-links a[href="#${href}"]`);
