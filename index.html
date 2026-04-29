@@ -865,9 +865,8 @@
   </div>
   <nav class="nav-links">
     <a href="#problem">Problem</a>
-    <a href="#loop">Loop</a>
-    <a href="#modes">Modes</a>
     <a href="#architecture">Architecture</a>
+    <a href="#modes">Modes</a>
   </nav>
   <div class="nav-right">
     <div class="nav-partner">
@@ -948,7 +947,7 @@
   <div class="section-inner">
     <div class="eyebrow"><span class="num">01</span>The NPT crisis</div>
     <h2 class="h2">Every hour the rig is down,<br>it costs <span style="color:var(--danger)">$45K–$60K</span>.</h2>
-    <p class="lede">Sensor fleets generate signals every second. But signals don't fix rigs — engineers do. And by the time an engineer correlates the signal, calls the warehouse, and types the work order, the rig has been silent for two days. Roughly 70% of that response time is lost inside manual system lookups — parts availability, work history, and technician scheduling.</p>
+    <p class="lede">Sensor fleets generate signals every second. But signals don't fix rigs — engineers do. And by the time an engineer correlates the signal, calls the warehouse, and types the work order, the rig has been silent for two days.</p>
     <div class="grid-3" style="margin-top: 16px;">
       <div class="kpi-card glass">
         <div class="kpi-label">Cost per NPT hour</div>
@@ -974,7 +973,7 @@
   <div class="section-inner">
     <div class="eyebrow"><span class="num">02</span>The insights-to-action gap</div>
     <h2 class="h2">Today, four manual steps<br>sit between signal and fix.</h2>
-    <p class="lede">A human "middleware" engineer manually correlates IoT data with S/4HANA, calls the warehouse for parts, and types a work order. That cycle takes 6 to 48 hours.</p>
+    <p class="lede">A human "middleware" engineer manually correlates IoT data with S/4HANA, calls the warehouse for parts, and types a work order. That cycle takes 6 to 48 hours. Roughly 70% of that response time is lost inside manual system lookups — parts availability, work history, and technician scheduling.</p>
     <div class="grid-4" style="margin-top: 24px;">
       <div class="gap-step glass">
         <div class="step-num">①</div>
@@ -1016,40 +1015,57 @@
   </div>
 </section>
 
-<!-- ============== SECTION 4 — Loop ============== -->
-<section class="section" id="loop" data-scene="loop">
+<!-- ============== SECTION 4 — Solution Architecture ============== -->
+<section class="section" id="architecture" data-scene="integration">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">04</span>The 5-step loop</div>
-    <h2 class="h2">Predict → Context → Expose<br>→ Propose → Execute.</h2>
-    <p class="lede">Five luminous nodes connect by a continuous particle stream — the loop runs once per anomaly and never asks a human for what it can answer alone.</p>
-    <div class="loop-row">
-      <div class="loop-conn"></div>
-      <div class="loop-step" data-step="0">
-        <div class="ls-circle">01</div>
-        <div class="ls-name">Predict</div>
-        <div class="ls-detail">Databricks XGBoost scores telemetry against a trained failure pattern.</div>
-      </div>
-      <div class="loop-step" data-step="1">
-        <div class="ls-circle">02</div>
-        <div class="ls-name">Context</div>
-        <div class="ls-detail">Datasphere joins the prediction with EQUI, MARA and AUFK from S/4HANA.</div>
-      </div>
-      <div class="loop-step" data-step="2">
-        <div class="ls-circle">03</div>
-        <div class="ls-name">Expose</div>
-        <div class="ls-detail">OData V4 endpoints stream the enriched event to BTP in &lt;30s.</div>
-      </div>
-      <div class="loop-step" data-step="3">
-        <div class="ls-circle">04</div>
-        <div class="ls-name">Propose</div>
-        <div class="ls-detail">SBPA drafts a WO with part, technician and warehouse pre-resolved.</div>
-      </div>
-      <div class="loop-step" data-step="4">
-        <div class="ls-circle">05</div>
-        <div class="ls-name">Execute</div>
-        <div class="ls-detail">Confirmed by a human (HITL) or auto-issued (Autonomous) into S/4HANA.</div>
-      </div>
-    </div>
+    <div class="eyebrow"><span class="num">04</span>Solution architecture</div>
+    <h2 class="h2">Every protocol.<br>Every auth boundary.</h2>
+    <svg class="integration-svg" viewBox="0 0 1100 480">
+      <defs>
+        <linearGradient id="iGrad" x1="0" x2="1" y1="0" y2="0">
+          <stop offset="0" stop-color="#2E6FE8"/>
+          <stop offset="1" stop-color="#3FC8E4"/>
+        </linearGradient>
+      </defs>
+      <!-- nodes -->
+      <g font-family="Inter, sans-serif">
+        <!-- on-prem -->
+        <rect x="40" y="120" width="200" height="60" rx="10" fill="rgba(15,28,68,0.6)" stroke="#1B2F66"/>
+        <text x="60" y="146" fill="#7B8CAE" font-size="10" font-weight="600" letter-spacing="2">ON-PREM</text>
+        <text x="60" y="166" fill="#fff" font-size="14" font-weight="600">S/4HANA</text>
+
+        <!-- historian -->
+        <rect x="40" y="260" width="200" height="60" rx="10" fill="rgba(15,28,68,0.6)" stroke="#1B2F66"/>
+        <text x="60" y="286" fill="#7B8CAE" font-size="10" font-weight="600" letter-spacing="2">HISTORIAN</text>
+        <text x="60" y="306" fill="#fff" font-size="14" font-weight="600">IoT / Sensor Data</text>
+
+        <!-- BDC (Datasphere + Databricks + SAC) -->
+        <rect x="420" y="70" width="240" height="300" rx="14" fill="rgba(46,111,232,0.06)" stroke="#2E6FE8"/>
+        <text x="440" y="100" fill="#3FC8E4" font-size="10" font-weight="600" letter-spacing="2">SAP BDC</text>
+        <text x="440" y="132" fill="#fff" font-size="15" font-weight="700">Datasphere</text>
+        <text x="440" y="154" fill="#CDD4E4" font-size="11" font-family="JetBrains Mono">Replicated · Modeled</text>
+        <text x="440" y="200" fill="#fff" font-size="15" font-weight="700">Databricks</text>
+        <text x="440" y="222" fill="#CDD4E4" font-size="11" font-family="JetBrains Mono">XGBoost · MLflow</text>
+        <text x="440" y="268" fill="#fff" font-size="15" font-weight="700">SAC</text>
+        <text x="440" y="290" fill="#CDD4E4" font-size="11" font-family="JetBrains Mono">Trend analytics · KPIs</text>
+
+        <!-- BTP SBPA -->
+        <rect x="840" y="190" width="220" height="60" rx="10" fill="rgba(63,200,228,0.08)" stroke="#3FC8E4"/>
+        <text x="860" y="216" fill="#3FC8E4" font-size="10" font-weight="600" letter-spacing="2">BTP · SBPA</text>
+        <text x="860" y="236" fill="#fff" font-size="14" font-weight="600">Workflow · approval</text>
+
+        <!-- arrows -->
+        <g fill="none" stroke="url(#iGrad)" stroke-width="1.5">
+          <path class="iflow-line" d="M 240 150 C 320 150 360 170 420 170"/>
+          <path class="iflow-line" d="M 240 290 C 320 290 360 230 420 230"/>
+          <!-- Databricks → BTP · SBPA -->
+          <path class="iflow-line" d="M 660 200 C 720 200 780 220 840 220" stroke-width="2"/>
+
+          <!-- return loop: SBPA → S/4 -->
+          <path class="iflow-line" d="M 840 250 C 540 360 320 250 240 165" stroke="#F59E0B"/>
+        </g>
+      </g>
+    </svg>
   </div>
 </section>
 
@@ -1057,21 +1073,9 @@
 <section class="section" id="modes" data-scene="modes">
   <div class="section-inner">
     <div class="eyebrow"><span class="num">05</span>Two-mode autonomy</div>
-    <h2 class="h2">One loop. Three confidence gates.</h2>
-    <p class="lede">Confidence below 85% is logged for review. Between 85% and 94% routes to a Maintenance Lead for one-tap confirmation. At 95% and above, Rig-Guard executes — with a 30-minute cancel window.</p>
-    <div class="grid-3" style="margin-top: 16px;">
-      <div class="mode-card glass" data-mode="watch">
-        <div class="mode-band"></div>
-        <div class="mode-eyebrow">Watch · &lt;85%</div>
-        <div class="mode-name">Observe & Log</div>
-        <div class="mode-range">Confidence below 85%</div>
-        <p class="mode-detail">Signals are logged to SAC for trend analysis. No work order. No human page. The model keeps learning.</p>
-        <ul class="mode-list">
-          <li>Logged to SAC</li>
-          <li>No WO drafted</li>
-          <li>Model retraining loop</li>
-        </ul>
-      </div>
+    <h2 class="h2">One loop. Two confidence gates.</h2>
+    <p class="lede">Between 85% and 94%, the loop routes to a Maintenance Lead for one-tap confirmation. At 95% and above, Rig-Guard executes — with a 30-minute cancel window.</p>
+    <div class="grid-2" style="margin-top: 16px; gap: 24px;">
       <div class="mode-card glass" data-mode="hitl">
         <div class="mode-band"></div>
         <div class="mode-eyebrow">HITL · 85–94%</div>
@@ -1100,44 +1104,10 @@
   </div>
 </section>
 
-<!-- ============== SECTION 6 — SAP BDC ML pipeline ============== -->
-<section class="section" data-scene="databricks">
-  <div class="section-inner">
-    <div class="eyebrow"><span class="num">06</span>SAP BDC ML pipeline</div>
-    <h2 class="h2">Bronze → Silver → Gold → Predict.</h2>
-    <p class="lede">XGBoost trained on historical failure patterns; MLflow versions every model; prediction writes back to Datasphere as a particle stream.</p>
-    <div class="pipeline">
-      <div class="step bronze">
-        <div class="stp-tag">Bronze</div>
-        <div class="stp-title">Raw telemetry</div>
-        <div class="stp-sub">Vibration · temp · RPM · pressure · 10 Hz</div>
-      </div>
-      <div class="arr">›</div>
-      <div class="step silver">
-        <div class="stp-tag">Silver</div>
-        <div class="stp-title">Cleaned + windowed</div>
-        <div class="stp-sub">5-min rolling features per asset</div>
-      </div>
-      <div class="arr">›</div>
-      <div class="step gold">
-        <div class="stp-tag">Gold</div>
-        <div class="stp-title">Pattern-matched</div>
-        <div class="stp-sub">XGBoost · MLflow · failure score</div>
-      </div>
-      <div class="arr">›</div>
-      <div class="step predict">
-        <div class="stp-tag">Output</div>
-        <div class="stp-title">Score + threshold</div>
-        <div class="stp-sub">Gates at 85% and 95%</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== SECTION 7 — Agentic / Phone ============== -->
+<!-- ============== SECTION — Agentic / Phone ============== -->
 <section class="section" data-scene="agentic">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">07</span>Agentic layer</div>
+    <div class="eyebrow"><span class="num">06</span>Agentic layer</div>
     <h2 class="h2">One alert.<br>One tap.<br>One work order.</h2>
     <div class="grid-2" style="margin-top: 32px; gap: 60px; align-items: center;">
       <div class="phone">
@@ -1210,64 +1180,10 @@
   </div>
 </section>
 
-<!-- ============== SECTION 8 — Solution Architecture ============== -->
-<section class="section" id="architecture" data-scene="integration">
-  <div class="section-inner">
-    <div class="eyebrow"><span class="num">08</span>Solution architecture</div>
-    <h2 class="h2">Every protocol.<br>Every auth boundary.</h2>
-    <svg class="integration-svg" viewBox="0 0 1100 480">
-      <defs>
-        <linearGradient id="iGrad" x1="0" x2="1" y1="0" y2="0">
-          <stop offset="0" stop-color="#2E6FE8"/>
-          <stop offset="1" stop-color="#3FC8E4"/>
-        </linearGradient>
-      </defs>
-      <!-- nodes -->
-      <g font-family="Inter, sans-serif">
-        <!-- on-prem -->
-        <rect x="40" y="120" width="200" height="60" rx="10" fill="rgba(15,28,68,0.6)" stroke="#1B2F66"/>
-        <text x="60" y="146" fill="#7B8CAE" font-size="10" font-weight="600" letter-spacing="2">ON-PREM</text>
-        <text x="60" y="166" fill="#fff" font-size="14" font-weight="600">S/4HANA</text>
-
-        <!-- historian -->
-        <rect x="40" y="260" width="200" height="60" rx="10" fill="rgba(15,28,68,0.6)" stroke="#1B2F66"/>
-        <text x="60" y="286" fill="#7B8CAE" font-size="10" font-weight="600" letter-spacing="2">HISTORIAN</text>
-        <text x="60" y="306" fill="#fff" font-size="14" font-weight="600">IoT / Sensor Data</text>
-
-        <!-- BDC (Datasphere + Databricks + SAC) -->
-        <rect x="420" y="70" width="240" height="300" rx="14" fill="rgba(46,111,232,0.06)" stroke="#2E6FE8"/>
-        <text x="440" y="100" fill="#3FC8E4" font-size="10" font-weight="600" letter-spacing="2">SAP BDC</text>
-        <text x="440" y="132" fill="#fff" font-size="15" font-weight="700">Datasphere</text>
-        <text x="440" y="154" fill="#CDD4E4" font-size="11" font-family="JetBrains Mono">Replicated · Modeled</text>
-        <text x="440" y="200" fill="#fff" font-size="15" font-weight="700">Databricks</text>
-        <text x="440" y="222" fill="#CDD4E4" font-size="11" font-family="JetBrains Mono">XGBoost · MLflow</text>
-        <text x="440" y="268" fill="#fff" font-size="15" font-weight="700">SAC</text>
-        <text x="440" y="290" fill="#CDD4E4" font-size="11" font-family="JetBrains Mono">Trend analytics · KPIs</text>
-
-        <!-- BTP SBPA -->
-        <rect x="840" y="190" width="220" height="60" rx="10" fill="rgba(63,200,228,0.08)" stroke="#3FC8E4"/>
-        <text x="860" y="216" fill="#3FC8E4" font-size="10" font-weight="600" letter-spacing="2">BTP · SBPA</text>
-        <text x="860" y="236" fill="#fff" font-size="14" font-weight="600">Workflow · approval</text>
-
-        <!-- arrows -->
-        <g fill="none" stroke="url(#iGrad)" stroke-width="1.5">
-          <path class="iflow-line" d="M 240 150 C 320 150 360 170 420 170"/>
-          <path class="iflow-line" d="M 240 290 C 320 290 360 230 420 230"/>
-          <!-- Databricks → BTP · SBPA -->
-          <path class="iflow-line" d="M 660 200 C 720 200 780 220 840 220" stroke-width="2"/>
-
-          <!-- return loop: SBPA → S/4 -->
-          <path class="iflow-line" d="M 840 250 C 540 360 320 250 240 165" stroke="#F59E0B"/>
-        </g>
-      </g>
-    </svg>
-  </div>
-</section>
-
-<!-- ============== SECTION 9 — Demo time ============== -->
+<!-- ============== SECTION 7 — Demo time ============== -->
 <section class="section" id="demo" data-scene="demo">
   <div class="section-inner" style="text-align: center; max-width: 880px; margin: 0 auto;">
-    <div class="eyebrow" style="justify-content: center;"><span class="num">09</span>Demo</div>
+    <div class="eyebrow" style="justify-content: center;"><span class="num">07</span>Demo</div>
     <h2 class="h2"><span class="grad">Demo time.</span></h2>
     <p class="lede" style="margin: 0 auto 32px;">Watch the loop close in real time — sensor signal to executed work order, in under 30 seconds.</p>
     <div class="demo-stage">
@@ -1293,7 +1209,7 @@
 <!-- ============== SECTION 10 — Go-to-Market ============== -->
 <section class="section" id="gtm" data-scene="gtm">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">10</span>Go-to-market</div>
+    <div class="eyebrow"><span class="num">08</span>Go-to-market</div>
     <h2 class="h2">11 prospects.<br>Two industries. One motion.</h2>
     <div class="grid-2 gtm-grid">
       <div class="gtm-card glass">
@@ -1322,7 +1238,7 @@
 <!-- ============== SECTION 11 — Summary & Impact ============== -->
 <section class="section" id="summary" data-scene="summary">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">11</span>Summary & impact</div>
+    <div class="eyebrow"><span class="num">09</span>Summary & impact</div>
     <h2 class="h2">Reactive telemetry.<br><span class="grad">Autonomous execution.</span></h2>
     <p class="lede">Rig-Guard automates the end-to-end maintenance lifecycle, transforming reactive telemetry into proactive, autonomous SAP S/4HANA execution.</p>
     <div class="grid-3 impact-row" style="margin-top: 32px;">
@@ -1351,7 +1267,7 @@
 <!-- ============== SECTION 12 — Q & A ============== -->
 <section class="section" id="qa" data-scene="qa" style="min-height: 60vh;">
   <div class="section-inner" style="text-align: center; max-width: 720px; margin: 0 auto;">
-    <div class="eyebrow" style="justify-content: center;"><span class="num">12</span>Open floor</div>
+    <div class="eyebrow" style="justify-content: center;"><span class="num">10</span>Open floor</div>
     <h2 class="h2"><span class="grad">Q & A.</span></h2>
     <p class="lede" style="margin: 0 auto 32px;">Architecture, integration, security, GTM — anything is fair game.</p>
     <button class="btn-primary" style="margin: 0 auto;">Request a 30-minute demo →</button>
@@ -1361,7 +1277,7 @@
 <!-- ============== SECTION 13 — Thank you ============== -->
 <section class="section" id="thanks" data-scene="thanks" style="min-height: 70vh;">
   <div class="section-inner" style="text-align: center; max-width: 720px; margin: 0 auto;">
-    <div class="eyebrow" style="justify-content: center;"><span class="num">13</span>Closing</div>
+    <div class="eyebrow" style="justify-content: center;"><span class="num">11</span>Closing</div>
     <h2 class="h2" style="font-size: clamp(64px, 8vw, 128px);"><span class="grad">Thank you.</span></h2>
     <p class="lede" style="margin: 24px auto 0;">Built by SDG Group · SAP HACK2BUILD 2026.</p>
   </div>
