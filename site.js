@@ -166,12 +166,14 @@
     databricks:  { p: [6, 5, 7],     l: [0, 2.6, 0] },  // slide right
     agentic:     { p: [10, 3.5, 6],  l: [0, 2.5, 0] },  // close, side
     integration: { p: [0, 11, 16],   l: [0, 3.5, 0] },  // pull all the way out
+    demo:        { p: [0, 6, 10],    l: [0, 2.8, 0] },  // ceremonial centered
     gtm:         { p: [-6, 4, 9],    l: [0, 2.6, 0] },  // partner-side wide
     summary:     { p: [0, 7, 11],    l: [0, 3, 0] },    // ceremonial pull-back
-    cta:         { p: [8, 5, 9],     l: [0, 2.4, 0] },  // rest
+    qa:          { p: [8, 5, 9],     l: [0, 2.4, 0] },  // rest, hero-ish
+    thanks:      { p: [0, 9, 13],    l: [0, 3.2, 0] },  // wide ceremonial close
   };
 
-  const SCENE_LIST = ['hero','crisis','gap','meet','loop','modes','databricks','agentic','integration','gtm','summary','cta'];
+  const SCENE_LIST = ['hero','crisis','gap','meet','loop','modes','databricks','agentic','integration','demo','gtm','summary','qa','thanks'];
 
   // build scroll rail
   const rail = document.getElementById('scrollRail');
@@ -222,7 +224,7 @@
       targetCam.l.set(...cam.l);
       // update nav active
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-      const navMap = { problem:['crisis','gap'], loop:['loop'], modes:['modes'], architecture:['databricks','agentic','integration','gtm','summary','cta'] };
+      const navMap = { problem:['crisis','gap'], loop:['loop'], modes:['modes'], architecture:['databricks','agentic','integration'] };
       Object.entries(navMap).forEach(([href, scenes]) => {
         if (scenes.includes(scene)) {
           const a = document.querySelector(`.nav-links a[href="#${href}"]`);
