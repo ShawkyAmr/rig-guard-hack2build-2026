@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rig-Guard · Mode A · Human-on-the-Loop</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg-deep);
+    color: var(--text-hi);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+  }
+  #stage {
+    position: relative;
+    width: 100%; height: 100%;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 60%, rgba(245,158,11,0.06), transparent 70%),
+      var(--bg-deep);
+    overflow: hidden;
+  }
+  #canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hud { position: absolute; inset: 0; pointer-events: none; }
+
+  /* Caption pill — top center, amber dot */
+  .caption-pill {
+    position: absolute; left: 50%; top: 36px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px;
+    background: rgba(11, 26, 58, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--text-mid);
+    animation: pillFadeIn 1200ms var(--ease) both;
+  }
+  .caption-pill .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--warn);
+    box-shadow: 0 0 12px var(--warn);
+    animation: amberPulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pillFadeIn {
+    from { opacity: 0; transform: translate(-50%, -12px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+  @keyframes amberPulse {
+    0%, 100% { box-shadow: 0 0 6px var(--warn); opacity: 0.75; }
+    50%      { box-shadow: 0 0 22px var(--warn); opacity: 1; }
+  }
+
+  /* Storyline overlay — left side, animated reveal looping with the 4.5s scene */
+  .story {
+    position: absolute; left: clamp(28px, 5vw, 64px); top: 50%;
+    transform: translateY(-50%);
+    max-width: 480px;
+  }
+  .story-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--warn);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0;
+    animation: stEyebrow 4.5s var(--ease) infinite;
+  }
+  .story-eyebrow .lite {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor; box-shadow: 0 0 8px currentColor;
+  }
+  .story-h {
+    font-size: clamp(30px, 4.2vw, 52px);
+    font-weight: 700; line-height: 1.0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #FDE9C7 70%, var(--warn) 100%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent;
+  }
+  .story-h .line { display: block; overflow: hidden; }
+  .story-h .line span {
+    display: inline-block; transform: translateY(110%);
+    animation: stLine 4.5s var(--ease) infinite;
+  }
+  .story-h .line:nth-child(1) span { animation-delay: 0.05s; }
+  .story-h .line:nth-child(2) span { animation-delay: 0.18s; }
+
+  .kv-row {
+    margin-top: 18px;
+    display: grid; grid-template-columns: auto 1fr;
+    gap: 6px 18px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--text-mid);
+    opacity: 0;
+    animation: stKv 4.5s var(--ease) infinite;
+  }
+  .kv-row .k { color: var(--text-lo); letter-spacing: 0.06em; }
+
+  .resolve {
+    margin-top: 18px;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, rgba(46,111,232,0.18), rgba(63,200,228,0.18));
+    border: 1px solid rgba(63,200,228,0.5);
+    color: var(--cyan-400);
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    opacity: 0;
+    animation: stResolve 4.5s var(--ease) infinite;
+  }
+  .resolve .check {
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--grad);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 9px; font-weight: 700;
+  }
+
+  @keyframes stEyebrow {
+    0%   { opacity: 0; transform: translateY(8px); }
+    6%   { opacity: 1; transform: translateY(0); }
+    78%  { opacity: 1; }
+    92%, 100% { opacity: 0; transform: translateY(-4px); }
+  }
+  @keyframes stLine {
+    0%   { transform: translateY(110%); }
+    14%  { transform: translateY(0); }
+    78%  { transform: translateY(0); }
+    92%, 100% { transform: translateY(-110%); }
+  }
+  @keyframes stKv {
+    0%, 18%  { opacity: 0; transform: translateY(6px); }
+    32%      { opacity: 1; transform: translateY(0); }
+    78%      { opacity: 1; }
+    92%, 100% { opacity: 0; transform: translateY(-4px); }
+  }
+  @keyframes stResolve {
+    0%, 60%   { opacity: 0; transform: translateY(8px) scale(0.96); }
+    72%       { opacity: 1; transform: translateY(0) scale(1); }
+    78%       { transform: translateY(0) scale(1.04); }
+    86%       { opacity: 1; transform: translateY(0) scale(1); }
+    92%, 100% { opacity: 0; transform: translateY(-4px) scale(1); }
+  }
+
+  /* Confidence chip — top right */
+  .conf-chip {
+    position: absolute; right: clamp(28px, 4vw, 56px); top: 96px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: rgba(11,26,58,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(245,158,11,0.4);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--warn);
+    animation: chipFade 4.5s var(--ease) infinite;
+  }
+  .conf-chip .lite {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--warn); box-shadow: 0 0 8px var(--warn);
+  }
+  @keyframes chipFade {
+    0%   { opacity: 0; transform: translateX(8px); }
+    10%  { opacity: 1; transform: translateX(0); }
+    78%  { opacity: 1; }
+    92%, 100% { opacity: 0; }
+  }
+
+  .corner {
+    position: absolute; width: 64px; height: 64px;
+    border-color: var(--line); border-style: solid; border-width: 0;
+    opacity: 0.6;
+  }
+  .corner.tl { top: 24px; left: 24px; border-top-width: 1px; border-left-width: 1px; }
+  .corner.tr { top: 24px; right: 24px; border-top-width: 1px; border-right-width: 1px; }
+  .corner.bl { bottom: 24px; left: 24px; border-bottom-width: 1px; border-left-width: 1px; }
+  .corner.br { bottom: 24px; right: 24px; border-bottom-width: 1px; border-right-width: 1px; }
+</style>
+</head>
+<body data-scene="hitl">
+  <div id="stage">
+    <canvas id="canvas"></canvas>
+
+    <div class="hud">
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+
+      <div class="caption-pill">
+        <span class="dot"></span>
+        <span>Mode A · Human-on-the-Loop · 85–94%</span>
+      </div>
+
+      <div class="conf-chip">
+        <span class="lite"></span>
+        <span>Confidence 91% · amber</span>
+      </div>
+
+      <div class="story">
+        <div class="story-eyebrow"><span class="lite"></span>Alert · Maintenance Lead</div>
+        <h1 class="story-h">
+          <span class="line"><span>Top Drive ·</span></span>
+          <span class="line"><span>Bearing wear predicted.</span></span>
+        </h1>
+        <div class="kv-row">
+          <span class="k">Asset</span><span>Rig #7 / Top Drive</span>
+          <span class="k">Part</span><span>SKF 6309</span>
+          <span class="k">Work order</span><span>WO PM01 · draft</span>
+        </div>
+        <div class="resolve">
+          <span class="check">✓</span>
+          Confirmed · Crew lead M. Ortega
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+  <script src="rig.js"></script>
+  <script src="scenes.js"></script>
+  <script src="loop-player.js"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rig-Guard · Watch mode</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg-deep);
+    color: var(--text-hi);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    overflow: hidden;
+  }
+  #stage {
+    position: relative; width: 100%; height: 100%;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 60%, rgba(123,140,174,0.06), transparent 70%),
+      var(--bg-deep);
+    overflow: hidden;
+  }
+  #canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hud { position: absolute; inset: 0; pointer-events: none; }
+
+  .caption-pill {
+    position: absolute; left: 50%; top: 36px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 18px;
+    background: rgba(11,26,58,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--text-mid);
+    animation: pillFadeIn 1200ms var(--ease) both;
+  }
+  .caption-pill .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--text-lo);
+    animation: slatePulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pillFadeIn {
+    from { opacity: 0; transform: translate(-50%, -12px); }
+    to   { opacity: 1; transform: translate(-50%, 0); }
+  }
+  @keyframes slatePulse {
+    0%, 100% { opacity: 0.4; }
+    50%      { opacity: 1; }
+  }
+
+  /* Storyline — left side, slow loop matching 4s scene */
+  .story {
+    position: absolute; left: clamp(28px, 5vw, 64px); top: 50%;
+    transform: translateY(-50%);
+    max-width: 480px;
+  }
+  .story-eyebrow {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.24em;
+    text-transform: uppercase; color: var(--text-lo);
+    margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0;
+    animation: stEyebrow 4s var(--ease) infinite;
+  }
+  .story-eyebrow .lite {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+    animation: slatePulse 2.6s ease-in-out infinite;
+  }
+  .story-h {
+    font-size: clamp(30px, 4.2vw, 52px);
+    font-weight: 700; line-height: 1.0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #B7C0D6 60%, #7B8CAE 100%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent; -webkit-text-fill-color: transparent;
+  }
+  .story-h .line { display: block; overflow: hidden; }
+  .story-h .line span {
+    display: inline-block; transform: translateY(110%);
+    animation: stLine 4s var(--ease) infinite;
+  }
+  .story-h .line:nth-child(1) span { animation-delay: 0.05s; }
+  .story-h .line:nth-child(2) span { animation-delay: 0.18s; }
+
+  .story-tag {
+    margin-top: 16px;
+    font-size: 14px; color: var(--text-mid); line-height: 1.55;
+    max-width: 460px;
+    opacity: 0;
+    animation: stTag 4s var(--ease) infinite;
+  }
+
+  .badges {
+    margin-top: 18px;
+    display: flex; gap: 8px; flex-wrap: wrap;
+    opacity: 0;
+    animation: stBadges 4s var(--ease) infinite;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    background: rgba(11,26,58,0.7);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-lo);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .badge .lite {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-lo);
+    animation: slatePulse 2.6s ease-in-out infinite;
+  }
+
+  @keyframes stEyebrow {
+    0%   { opacity: 0; transform: translateY(8px); }
+    8%   { opacity: 1; transform: translateY(0); }
+    82%  { opacity: 1; }
+    94%, 100% { opacity: 0; transform: translateY(-4px); }
+  }
+  @keyframes stLine {
+    0%   { transform: translateY(110%); }
+    16%  { transform: translateY(0); }
+    82%  { transform: translateY(0); }
+    94%, 100% { transform: translateY(-110%); }
+  }
+  @keyframes stTag {
+    0%, 22%   { opacity: 0; transform: translateY(6px); }
+    34%       { opacity: 1; transform: translateY(0); }
+    82%       { opacity: 1; }
+    94%, 100% { opacity: 0; }
+  }
+  @keyframes stBadges {
+    0%, 38%   { opacity: 0; transform: translateY(6px); }
+    50%       { opacity: 1; transform: translateY(0); }
+    82%       { opacity: 1; }
+    94%, 100% { opacity: 0; }
+  }
+
+  /* Confidence chip — top right (slate) */
+  .conf-chip {
+    position: absolute; right: clamp(28px, 4vw, 56px); top: 96px;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: rgba(11,26,58,0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    color: var(--text-lo);
+    animation: chipFade 4s var(--ease) infinite;
+  }
+  .conf-chip .lite {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-lo);
+    animation: slatePulse 2.6s ease-in-out infinite;
+  }
+  @keyframes chipFade {
+    0%   { opacity: 0; transform: translateX(8px); }
+    12%  { opacity: 1; transform: translateX(0); }
+    82%  { opacity: 1; }
+    94%, 100% { opacity: 0; }
+  }
+
+  .corner {
+    position: absolute; width: 64px; height: 64px;
+    border-color: var(--line); border-style: solid; border-width: 0;
+    opacity: 0.5;
+  }
+  .corner.tl { top: 24px; left: 24px; border-top-width: 1px; border-left-width: 1px; }
+  .corner.tr { top: 24px; right: 24px; border-top-width: 1px; border-right-width: 1px; }
+  .corner.bl { bottom: 24px; left: 24px; border-bottom-width: 1px; border-left-width: 1px; }
+  .corner.br { bottom: 24px; right: 24px; border-bottom-width: 1px; border-right-width: 1px; }
+</style>
+</head>
+<body data-scene="watch">
+  <div id="stage">
+    <canvas id="canvas"></canvas>
+
+    <div class="hud">
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+
+      <div class="caption-pill">
+        <span class="dot"></span>
+        <span>Watch mode · &lt;85%</span>
+      </div>
+
+      <div class="conf-chip">
+        <span class="lite"></span>
+        <span>Confidence 72% · logged</span>
+      </div>
+
+      <div class="story">
+        <div class="story-eyebrow"><span class="lite"></span>Below threshold · SAC telemetry</div>
+        <h1 class="story-h">
+          <span class="line"><span>Watching.</span></span>
+          <span class="line"><span>Logging. No action.</span></span>
+        </h1>
+        <p class="story-tag">Sub-threshold signals are streamed to SAC for trend analysis. No alert is raised, no work order is generated — Rig-Guard simply remembers.</p>
+        <div class="badges">
+          <span class="badge"><span class="lite"></span>SAC · telemetry</span>
+          <span class="badge"><span class="lite"></span>BDC · cold path</span>
+          <span class="badge"><span class="lite"></span>No human-in-the-loop</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+  <script src="rig.js"></script>
+  <script src="scenes.js"></script>
+  <script src="loop-player.js"></script>
+</body>
+</html>
