@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rig-Guard · Track B · Animation Player</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    height: 100%;
+    background: var(--bg-deep);
+    color: var(--text-hi);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-feature-settings: "cv11","ss01","ss03";
+    overflow: hidden;
+  }
+  body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    grid-template-rows: 64px 1fr 56px;
+    grid-template-areas:
+      "topbar  topbar"
+      "sidebar stage"
+      "sidebar footer";
+  }
+
+  /* ---------- Top bar ---------- */
+  .topbar {
+    grid-area: topbar;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    background: var(--bg-primary);
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .brand-mark {
+    width: 28px; height: 28px;
+    background: var(--grad);
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 0 0 24px rgba(63,200,228,0.4);
+  }
+  .brand-mark::after {
+    content: ""; position: absolute; inset: 6px;
+    background: var(--bg-primary); border-radius: 2px;
+  }
+  .brand-mark::before {
+    content: ""; position: absolute; left: 50%; top: 4px; bottom: 4px;
+    width: 2px; transform: translateX(-50%);
+    background: linear-gradient(180deg, transparent, #fff, transparent);
+  }
+  .brand-name {
+    font-weight: 700; letter-spacing: -0.01em; font-size: 16px;
+  }
+  .brand-sub {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600; font-size: 11px;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-lo);
+  }
+  .meta {
+    display: flex; align-items: center; gap: 24px;
+    font-size: 12px; color: var(--text-lo);
+  }
+  .meta b { color: var(--text-mid); font-weight: 500; }
+  .pill {
+    padding: 6px 12px; border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev-1);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-mid);
+  }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    grid-area: sidebar;
+    background: var(--bg-primary);
+    border-right: 1px solid var(--line);
+    padding: 20px 16px;
+    display: flex; flex-direction: column; gap: 18px;
+    overflow-y: auto;
+  }
+  .eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+    margin-bottom: 8px;
+  }
+  .scene-list {
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .scene-btn {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    color: var(--text-mid);
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    transition: all 200ms var(--ease);
+  }
+  .scene-btn:hover {
+    background: var(--bg-elev-2);
+    border-color: var(--line);
+    color: var(--text-hi);
+  }
+  .scene-btn.active {
+    background: var(--bg-elev-2);
+    border-color: var(--blue-500);
+    color: var(--text-hi);
+    box-shadow: 0 0 0 1px rgba(46,111,232,0.2), 0 0 24px rgba(63,200,228,0.1);
+  }
+  .scene-dot {
+    flex: 0 0 8px; width: 8px; height: 8px; border-radius: 50%;
+    margin-top: 6px;
+    background: var(--text-lo);
+  }
+  .scene-btn[data-scene="hero"] .scene-dot { background: var(--cyan-400); box-shadow: 0 0 8px var(--cyan-400); }
+  .scene-btn[data-scene="hitl"] .scene-dot { background: var(--warn); box-shadow: 0 0 8px var(--warn); }
+  .scene-btn[data-scene="autonomous"] .scene-dot { background: linear-gradient(135deg,#2E6FE8,#3FC8E4); background: var(--cyan-400); box-shadow: 0 0 12px var(--cyan-400); }
+  .scene-btn[data-scene="watch"] .scene-dot { background: var(--text-lo); }
+  .scene-title {
+    font-size: 13px; font-weight: 600; line-height: 1.3;
+  }
+  .scene-meta {
+    font-size: 11px; color: var(--text-lo); margin-top: 2px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .panel {
+    background: rgba(15, 28, 68, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .panel h4 {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-lo);
+    margin-bottom: 10px;
+  }
+  .row { display: flex; align-items: center; justify-content: space-between; margin: 6px 0; font-size: 12px; }
+  .row span:first-child { color: var(--text-lo); }
+  .row span:last-child { color: var(--text-mid); font-family: 'JetBrains Mono', monospace; }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    height: 36px; padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev-2);
+    color: var(--text-hi);
+    font: 600 12px/1 'Inter', sans-serif;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 200ms var(--ease);
+  }
+  .btn:hover { border-color: var(--blue-500); }
+  .btn-primary {
+    background: var(--grad); border-color: transparent;
+    box-shadow: 0 0 24px rgba(63,200,228,0.3);
+  }
+  .btn-primary:hover { box-shadow: 0 0 32px rgba(63,200,228,0.5); }
+  .btn[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+  /* ---------- Stage ---------- */
+  .stage {
+    grid-area: stage;
+    position: relative;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 60%, rgba(46,111,232,0.08), transparent 70%),
+      var(--bg-deep);
+    overflow: hidden;
+  }
+  #canvas {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+  }
+  .hud {
+    position: absolute; pointer-events: none;
+    inset: 0;
+  }
+  .hud > * { pointer-events: auto; }
+
+  /* corners */
+  .corner {
+    position: absolute; width: 80px; height: 80px;
+    border-color: var(--line);
+    border-style: solid;
+    border-width: 0;
+    opacity: 0.7;
+  }
+  .corner.tl { top: 24px; left: 24px; border-top-width: 1px; border-left-width: 1px; }
+  .corner.tr { top: 24px; right: 24px; border-top-width: 1px; border-right-width: 1px; }
+  .corner.bl { bottom: 24px; left: 24px; border-bottom-width: 1px; border-left-width: 1px; }
+  .corner.br { bottom: 24px; right: 24px; border-bottom-width: 1px; border-right-width: 1px; }
+
+  /* caption pill (scene name) */
+  .caption-pill {
+    position: absolute; left: 50%; top: 28px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px;
+    background: rgba(11, 26, 58, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-mid);
+  }
+  .caption-pill .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--cyan-400);
+    box-shadow: 0 0 12px currentColor;
+  }
+  .caption-pill[data-mode="hitl"] .dot { background: var(--warn); color: var(--warn); }
+  .caption-pill[data-mode="autonomous"] .dot { background: var(--cyan-400); color: var(--cyan-400); }
+  .caption-pill[data-mode="watch"] .dot { background: var(--text-lo); color: var(--text-lo); box-shadow: none; }
+
+  /* hero overlay (centered title) */
+  .hero-title {
+    position: absolute; left: 36px; top: 50%;
+    transform: translateY(-50%);
+    max-width: 360px;
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--cyan-400);
+    margin-bottom: 14px;
+  }
+  .hero-h {
+    font-size: clamp(32px, 4vw, 52px);
+    font-weight: 700; line-height: 0.96;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #fff 0%, #CDD4E4 60%, #4FE0D2 100%);
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+  }
+  .hero-tag {
+    margin-top: 14px;
+    font-size: 14px; color: var(--text-mid); line-height: 1.55;
+    max-width: 420px;
+  }
+
+  /* HITL / Autonomous overlay cards */
+  .glass-card {
+    position: absolute;
+    background: rgba(15, 28, 68, 0.72);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: var(--text-hi);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+    transform: translateY(0);
+    opacity: 0;
+    transition: opacity 400ms var(--ease), transform 400ms var(--ease);
+  }
+  .glass-card.in { opacity: 1; }
+  .glass-card .card-eyebrow {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--text-lo);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .glass-card .card-eyebrow .lite {
+    width: 6px; height: 6px; border-radius: 50%; background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+  }
+  .glass-card .card-title {
+    font-size: 14px; font-weight: 600; line-height: 1.3;
+    margin-bottom: 8px;
+  }
+  .glass-card .kv {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-mid);
+    display: grid; grid-template-columns: 1fr auto; gap: 4px 12px;
+    margin-bottom: 10px;
+  }
+  .glass-card .kv .k { color: var(--text-lo); }
+  .glass-card .actions {
+    display: flex; gap: 8px;
+  }
+  .confirm-btn {
+    display: flex; align-items: center; gap: 6px;
+    height: 32px; padding: 0 14px;
+    background: var(--grad);
+    border: none; border-radius: 8px;
+    font: 600 12px 'Inter', sans-serif;
+    letter-spacing: 0.04em; color: #fff;
+    cursor: pointer;
+    transition: all 200ms var(--ease);
+  }
+  .confirm-btn.flash {
+    box-shadow: 0 0 0 4px rgba(63,200,228,0.4), 0 0 32px var(--cyan-400);
+    transform: scale(1.05);
+  }
+  .ghost-btn {
+    height: 32px; padding: 0 12px;
+    background: transparent; border: 1px solid var(--stroke);
+    color: var(--text-mid); border-radius: 8px;
+    font: 600 12px 'Inter', sans-serif; cursor: pointer;
+  }
+
+  /* finger pointer */
+  .pointer {
+    position: absolute;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: rgba(63,200,228,0.2);
+    border: 2px solid var(--cyan-400);
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    transition: opacity 200ms var(--ease), transform 300ms var(--ease);
+    box-shadow: 0 0 24px var(--cyan-400);
+    pointer-events: none;
+  }
+  .pointer.in { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  .pointer.tap { transform: translate(-50%, -50%) scale(0.55); }
+
+  /* tile fan-out */
+  .tile {
+    position: absolute;
+    background: rgba(15, 28, 68, 0.78);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    min-width: 180px;
+    opacity: 0;
+    transform: translate(0, 12px) scale(0.95);
+    transition: opacity 350ms var(--ease), transform 400ms var(--ease);
+  }
+  .tile.in { opacity: 1; transform: translate(0,0) scale(1); }
+  .tile .tile-eyebrow {
+    font-size: 9px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--cyan-400);
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .tile .tile-eyebrow .check {
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--grad);
+    display: inline-flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 8px; font-weight: 700;
+  }
+  .tile .tile-title { font-size: 13px; font-weight: 600; color: var(--text-hi); }
+  .tile .tile-sub { font-size: 11px; color: var(--text-lo); margin-top: 2px; font-family: 'JetBrains Mono', monospace; }
+
+  /* loop nodes around rig (autonomous) */
+  .loop-node {
+    position: absolute;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: rgba(15, 28, 68, 0.75);
+    backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    font: 600 10px 'Inter', sans-serif;
+    color: var(--text-lo);
+    transition: all 300ms var(--ease);
+    transform: translate(-50%,-50%);
+  }
+  .loop-node.active {
+    color: var(--text-hi);
+    border-color: var(--cyan-400);
+    box-shadow: 0 0 0 4px rgba(63,200,228,0.18), 0 0 24px var(--cyan-400);
+    background: var(--bg-elev-3);
+  }
+  .loop-node .ln-label {
+    position: absolute; top: 100%; margin-top: 6px;
+    font-size: 9px; letter-spacing: 0.18em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: inherit;
+  }
+
+  /* mobile glyph (autonomous) */
+  .mobile-glyph {
+    position: absolute; right: 36px; bottom: 36px;
+    width: 60px; height: 100px;
+    border: 1px solid var(--line);
+    background: rgba(15,28,68,0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    padding: 8px 6px;
+    display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 300ms var(--ease), transform 300ms var(--ease);
+  }
+  .mobile-glyph.in { opacity: 1; transform: translateY(0); }
+  .mobile-glyph.buzz { animation: buzz 200ms ease-in-out 2; }
+  @keyframes buzz {
+    0%,100% { transform: translate(0,0); }
+    25% { transform: translate(-2px, -1px); }
+    75% { transform: translate(2px, 1px); }
+  }
+  .mobile-glyph .notch {
+    width: 16px; height: 3px; background: var(--stroke); border-radius: 999px; margin: 2px 0 6px;
+  }
+  .mobile-glyph .toast {
+    width: 100%; background: var(--bg-elev-3); border-radius: 6px;
+    padding: 6px 5px;
+    font-size: 7.5px; line-height: 1.2;
+    color: var(--text-mid);
+    border-left: 2px solid var(--cyan-400);
+  }
+
+  /* Watch SAC dashboard glyph */
+  .sac-glyph {
+    position: absolute; left: 36px; bottom: 36px;
+    width: 200px;
+    background: rgba(11, 26, 58, 0.65);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+    opacity: 0; transition: opacity 400ms var(--ease);
+  }
+  .sac-glyph.in { opacity: 1; }
+  .sac-glyph .sac-head { font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-lo); margin-bottom: 8px; }
+  .sac-glyph .sac-body { display: flex; align-items: flex-end; gap: 4px; height: 26px; }
+  .sac-glyph .sac-body i {
+    flex: 1; background: var(--text-lo); opacity: 0.4; border-radius: 2px;
+    display: block;
+  }
+  .sac-glyph .sac-badge {
+    margin-top: 8px;
+    font-size: 9px;
+    color: var(--text-lo);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sac-glyph .sac-badge .pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--text-lo);
+    animation: slowpulse 2.4s ease-in-out infinite;
+  }
+  @keyframes slowpulse {
+    0%,100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  /* HITL alert + KPI tickers */
+  .kpi-ticker {
+    position: absolute; right: 36px; top: 80px;
+    background: rgba(11,26,58,0.65); backdrop-filter: blur(12px);
+    border: 1px solid var(--line);
+    border-radius: 10px; padding: 8px 12px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-mid);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .kpi-ticker .lite {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--cyan-400);
+    box-shadow: 0 0 8px var(--cyan-400);
+  }
+
+  /* footer */
+  .footer {
+    grid-area: footer;
+    background: var(--bg-primary);
+    border-top: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px;
+    font-size: 11px; color: var(--text-lo);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+  .timeline {
+    flex: 1; max-width: 480px; margin: 0 24px;
+    height: 4px; background: var(--bg-elev-1);
+    border: 1px solid var(--line);
+    border-radius: 2px; position: relative; overflow: hidden;
+  }
+  .timeline-fill {
+    position: absolute; left: 0; top: 0; bottom: 0;
+    background: var(--grad);
+    width: 0%;
+    box-shadow: 0 0 12px var(--cyan-400);
+  }
+
+  /* particle stream svg overlay */
+  .stream-svg {
+    position: absolute; inset: 0; pointer-events: none;
+    width: 100%; height: 100%;
+  }
+
+  /* badges and chips on cards */
+  .chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 999px;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.06em;
+    background: rgba(245,158,11,0.12);
+    color: var(--warn);
+    border: 1px solid rgba(245,158,11,0.4);
+  }
+  .chip.cyan {
+    background: rgba(63,200,228,0.12);
+    color: var(--cyan-400);
+    border-color: rgba(63,200,228,0.4);
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ============== TOP BAR ============== -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div>
+      <div class="brand-name">Rig-Guard</div>
+      <div class="brand-sub">Autonomous EAM Agent · Track B</div>
+    </div>
+  </div>
+  <div class="meta">
+    <span><b>SAP Hack2Build 2026</b></span>
+    <span class="pill">v0.1 · animation player</span>
+  </div>
+</header>
+
+<!-- ============== SIDEBAR ============== -->
+<aside class="sidebar">
+  <div>
+    <div class="eyebrow">Scenes</div>
+    <div class="scene-list" id="sceneList">
+      <button class="scene-btn active" data-scene="hero">
+        <span class="scene-dot"></span>
+        <span>
+          <div class="scene-title">Hero · Brand loop</div>
+          <div class="scene-meta">7.0s · cyan pulse</div>
+        </span>
+      </button>
+      <button class="scene-btn" data-scene="hitl">
+        <span class="scene-dot"></span>
+        <span>
+          <div class="scene-title">Mode A · Human-on-the-Loop</div>
+          <div class="scene-meta">4.5s · 85–94%</div>
+        </span>
+      </button>
+      <button class="scene-btn" data-scene="autonomous">
+        <span class="scene-dot"></span>
+        <span>
+          <div class="scene-title">Mode B · Fully Autonomous</div>
+          <div class="scene-meta">4.5s · ≥95%</div>
+        </span>
+      </button>
+      <button class="scene-btn" data-scene="watch">
+        <span class="scene-dot"></span>
+        <span>
+          <div class="scene-title">Watch mode</div>
+          <div class="scene-meta">4.0s · &lt;85%</div>
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h4>Scene state</h4>
+    <div class="row"><span>Scene</span><span id="ms-scene">hero</span></div>
+    <div class="row"><span>Loop t</span><span id="ms-loopt">0.00 s</span></div>
+    <div class="row"><span>Phase</span><span id="ms-phase">—</span></div>
+    <div class="row"><span>Camera</span><span id="ms-cam">orbit · 5°/s</span></div>
+  </div>
+
+  <div class="panel">
+    <h4>Capture</h4>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <button class="btn btn-primary" id="recBtn">Record · WebM</button>
+    </div>
+    <div class="row"><span>Status</span><span id="rec-status">idle</span></div>
+    <div class="row"><span>Frame rate</span><span>60 fps</span></div>
+    <div class="row"><span>Resolution</span><span id="rec-res">1080×1080</span></div>
+    <p style="font-size:11px;color:var(--text-lo);line-height:1.5;margin-top:8px;">Records the current scene for one full loop and downloads a <code style="color:var(--text-mid)">.webm</code> ready for ffmpeg → GIF.</p>
+  </div>
+
+  <div class="panel">
+    <h4>Render targets</h4>
+    <div class="row"><span>1:1 hero</span><span>1080×1080</span></div>
+    <div class="row"><span>16:9 hero</span><span>1920×1080</span></div>
+    <div class="row"><span>Mode loops</span><span>1080×1080</span></div>
+    <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+      <button class="btn" data-aspect="1:1" style="height:28px;font-size:11px;padding:0 10px;">1:1</button>
+      <button class="btn" data-aspect="16:9" style="height:28px;font-size:11px;padding:0 10px;">16:9</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ============== STAGE ============== -->
+<main class="stage" id="stage">
+  <canvas id="canvas"></canvas>
+
+  <!-- HUD overlay -->
+  <div class="hud" id="hud">
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <div class="caption-pill" id="captionPill" data-mode="hero">
+      <span class="dot"></span>
+      <span id="caption-text">Hero · Brand loop</span>
+    </div>
+
+    <!-- KPI ticker (HITL + Autonomous) -->
+    <div class="kpi-ticker" id="kpiTicker" style="display:none;">
+      <span class="lite"></span>
+      <span id="kpi-text">Confidence 91%</span>
+    </div>
+
+    <!-- Hero title -->
+    <div class="hero-title" id="heroTitle">
+      <div class="hero-eyebrow">Autonomous EAM · SAP BDC</div>
+      <h1 class="hero-h">The rig that<br>watches itself.</h1>
+      <p class="hero-tag">A closed-loop maintenance agent that predicts, contextualizes, and executes — eliminating the 48-hour insight-to-action gap.</p>
+    </div>
+
+    <!-- HITL alert card -->
+    <div class="glass-card" id="hitlCard" style="right: 56px; top: 130px; width: 280px; display:none;">
+      <div class="card-eyebrow" style="color: var(--warn);">
+        <span class="lite"></span>Alert · Maintenance Lead
+      </div>
+      <div class="card-title">Top Drive · Bearing wear predicted</div>
+      <div class="kv">
+        <span class="k">Asset</span><span>Rig #7 / Top Drive</span>
+        <span class="k">Confidence</span><span>91%</span>
+        <span class="k">Part</span><span>SKF 6309</span>
+        <span class="k">Work order</span><span>WO PM01 · draft</span>
+      </div>
+      <div style="margin-bottom:10px;">
+        <span class="chip">Mode A · HITL</span>
+      </div>
+      <div class="actions">
+        <button class="confirm-btn" id="confirmBtn">✓ Confirm</button>
+        <button class="ghost-btn">Defer</button>
+      </div>
+    </div>
+
+    <!-- Pointer -->
+    <div class="pointer" id="pointer"></div>
+
+    <!-- Loop nodes (autonomous) -->
+    <div id="loopNodes" style="display:none;">
+      <div class="loop-node" data-step="0" style="left: 50%; top: 18%;">
+        01<span class="ln-label">Predict</span>
+      </div>
+      <div class="loop-node" data-step="1" style="left: 82%; top: 38%;">
+        02<span class="ln-label">Context</span>
+      </div>
+      <div class="loop-node" data-step="2" style="left: 78%; top: 72%;">
+        03<span class="ln-label">Expose</span>
+      </div>
+      <div class="loop-node" data-step="3" style="left: 22%; top: 72%;">
+        04<span class="ln-label">Propose</span>
+      </div>
+      <div class="loop-node" data-step="4" style="left: 18%; top: 38%;">
+        05<span class="ln-label">Execute</span>
+      </div>
+    </div>
+
+    <!-- Tile fan-out (autonomous) -->
+    <div id="tiles" style="display:none;">
+      <div class="tile" data-tile="0" style="right: 56px; top: 130px;">
+        <div class="tile-eyebrow"><span class="check">✓</span>Work order</div>
+        <div class="tile-title">WO PM01 created</div>
+        <div class="tile-sub">S/4HANA · Plant 1000</div>
+      </div>
+      <div class="tile" data-tile="1" style="right: 56px; top: 220px;">
+        <div class="tile-eyebrow"><span class="check">✓</span>Parts reserved</div>
+        <div class="tile-title">2× SKF 6309</div>
+        <div class="tile-sub">Warehouse A · WMS</div>
+      </div>
+      <div class="tile" data-tile="2" style="right: 56px; top: 310px;">
+        <div class="tile-eyebrow"><span class="check">✓</span>Technician assigned</div>
+        <div class="tile-title">Crew lead · M. Ortega</div>
+        <div class="tile-sub">ETA 30 min</div>
+      </div>
+    </div>
+
+    <!-- Mobile glyph (autonomous) -->
+    <div class="mobile-glyph" id="mobileGlyph">
+      <div class="notch"></div>
+      <div class="toast">
+        <div style="font-weight:700;font-size:8px;color:var(--cyan-400);margin-bottom:2px;">RIG-GUARD</div>
+        WO executed<br>30-min cancel window
+      </div>
+    </div>
+
+    <!-- Watch SAC glyph -->
+    <div class="sac-glyph" id="sacGlyph">
+      <div class="sac-head">SAC · Telemetry</div>
+      <div class="sac-body">
+        <i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i>
+        <i style="height:70%"></i><i style="height:50%"></i><i style="height:45%"></i>
+        <i style="height:60%"></i><i style="height:35%"></i><i style="height:50%"></i>
+      </div>
+      <div class="sac-badge">
+        <span class="pulse"></span>
+        logged · no action
+      </div>
+    </div>
+
+    <!-- SVG stream overlay -->
+    <svg class="stream-svg" id="streamSvg"></svg>
+  </div>
+</main>
+
+<!-- ============== FOOTER ============== -->
+<footer class="footer">
+  <span>BUILT ON SAP BUSINESS DATA CLOUD</span>
+  <div class="timeline"><div class="timeline-fill" id="tlFill"></div></div>
+  <span id="tlLabel">0.00 / 7.00 s</span>
+</footer>
+
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script src="rig.js"></script>
+<script src="scenes.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

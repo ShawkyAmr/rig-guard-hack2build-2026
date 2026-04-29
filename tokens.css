@@ -1,0 +1,48 @@
+/* Rig-Guard design tokens — extracted from brief §2.1 */
+:root {
+  /* Backgrounds */
+  --bg-deep: #050B1E;
+  --bg-primary: #0A1430;
+  --bg-elev-1: #0B1A3A;
+  --bg-elev-2: #0F1C44;
+  --bg-elev-3: #13234F;
+
+  /* Lines */
+  --line: #1B2F66;
+  --stroke: #2A3758;
+
+  /* Accents */
+  --blue-500: #2E6FE8;
+  --blue-600: #2E4FAE;
+  --blue-700: #243E85;
+  --cyan-400: #3FC8E4;
+  --aqua-300: #4FE0D2;
+  --teal-600: #0891A6;
+
+  /* Text */
+  --text-hi: #FFFFFF;
+  --text-mid: #CDD4E4;
+  --text-lo: #7B8CAE;
+
+  /* Slate steps */
+  --slate-1: #5C6A8A;
+  --slate-2: #6A789A;
+  --slate-3: #8A96B3;
+  --slate-4: #9AA8C9;
+  --slate-5: #B7C0D6;
+  --slate-6: #E4E8F2;
+  --slate-7: #E7ECF7;
+  --slate-8: #F4F6FB;
+  --slate-9: #F9FAFD;
+
+  /* Status */
+  --ok: #10B981;
+  --warn: #F59E0B;
+  --danger: #EF4444;
+
+  /* Signature gradient */
+  --grad: linear-gradient(135deg, #2E6FE8 0%, #3FC8E4 100%);
+
+  /* Easing */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
