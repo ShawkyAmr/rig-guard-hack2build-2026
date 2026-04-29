@@ -75,19 +75,22 @@
     font-size: clamp(36px, 5vw, 64px);
     font-weight: 700; line-height: 0.96;
     letter-spacing: -0.02em;
-    background: linear-gradient(135deg, #fff 0%, #CDD4E4 60%, #4FE0D2 100%);
-    -webkit-background-clip: text; background-clip: text;
-    color: transparent;
-    -webkit-text-fill-color: transparent;
+    color: #fff;
   }
   .hero-h .line {
     display: block;
     overflow: hidden;
+    padding-bottom: 0.08em; /* prevent descenders from being clipped */
   }
   .hero-h .line span {
     display: inline-block;
     transform: translateY(110%);
     animation: heroLine 900ms var(--ease) forwards;
+    background: linear-gradient(135deg, #fff 0%, #CDD4E4 60%, #4FE0D2 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
   }
   .hero-h .line:nth-child(1) span { animation-delay: 600ms; }
   .hero-h .line:nth-child(2) span { animation-delay: 800ms; }
