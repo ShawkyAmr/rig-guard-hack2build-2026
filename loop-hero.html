@@ -69,7 +69,7 @@
     text-transform: uppercase; color: var(--cyan-400);
     margin-bottom: 18px;
     opacity: 0;
-    animation: heroEyebrow 7s var(--ease) infinite;
+    animation: heroEyebrow 900ms var(--ease) 200ms forwards;
   }
   .hero-h {
     font-size: clamp(36px, 5vw, 64px);
@@ -87,38 +87,30 @@
   .hero-h .line span {
     display: inline-block;
     transform: translateY(110%);
-    animation: heroLine 7s var(--ease) infinite;
+    animation: heroLine 900ms var(--ease) forwards;
   }
-  .hero-h .line:nth-child(1) span { animation-delay: 0.1s; }
-  .hero-h .line:nth-child(2) span { animation-delay: 0.4s; }
+  .hero-h .line:nth-child(1) span { animation-delay: 600ms; }
+  .hero-h .line:nth-child(2) span { animation-delay: 800ms; }
 
   .hero-tag {
     margin-top: 18px;
     font-size: 15px; color: var(--text-mid); line-height: 1.55;
     max-width: 460px;
     opacity: 0;
-    animation: heroTag 7s var(--ease) infinite;
+    animation: heroTag 900ms var(--ease) 1400ms forwards;
   }
 
   @keyframes heroEyebrow {
-    0%   { opacity: 0; transform: translateY(8px); }
-    8%   { opacity: 1; transform: translateY(0); }
-    78%  { opacity: 1; }
-    92%  { opacity: 0; transform: translateY(-4px); }
-    100% { opacity: 0; transform: translateY(-4px); }
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
   @keyframes heroLine {
-    0%   { transform: translateY(110%); }
-    14%  { transform: translateY(0); }
-    78%  { transform: translateY(0); }
-    92%  { transform: translateY(-110%); }
-    100% { transform: translateY(-110%); }
+    from { transform: translateY(110%); }
+    to   { transform: translateY(0); }
   }
   @keyframes heroTag {
-    0%, 14%   { opacity: 0; transform: translateY(8px); }
-    28%       { opacity: 1; transform: translateY(0); }
-    78%       { opacity: 1; }
-    92%, 100% { opacity: 0; transform: translateY(-4px); }
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   /* Decorative corner ticks */
