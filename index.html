@@ -794,12 +794,11 @@
     <a href="#loop">Loop</a>
     <a href="#modes">Modes</a>
     <a href="#architecture">Architecture</a>
-    <a href="#kpis">KPIs</a>
   </nav>
   <div class="nav-right">
     <div class="nav-partner">
       <span class="nav-partner-label">by</span>
-      <img src="uploads/SDG GROUP Logo/SDG - Logo White.png" alt="SDG Group" class="nav-partner-logo" />
+      <img src="assets/sdg-logo-white.png" alt="SDG Group" class="nav-partner-logo" />
     </div>
     <a href="#cta" class="nav-cta">Request demo →</a>
   </div>
@@ -874,7 +873,7 @@
 <section class="section" id="problem" data-scene="crisis">
   <div class="section-inner">
     <div class="eyebrow"><span class="num">01</span>The NPT crisis</div>
-    <h2 class="h2">Every hour the rig is<br>down costs <span style="color:var(--danger)">$45K–$60K</span>.</h2>
+    <h2 class="h2">Every hour the rig is down,<br>it costs <span style="color:var(--danger)">$45K–$60K</span>.</h2>
     <p class="lede">Sensor fleets generate signals every second. But signals don't fix rigs — engineers do. And by the time an engineer correlates the signal, calls the warehouse, and types the work order, the rig has been silent for two days. Roughly 70% of that response time is lost inside manual system lookups — parts availability, work history, and technician scheduling.</p>
     <div class="grid-3" style="margin-top: 16px;">
       <div class="kpi-card glass">
@@ -1027,73 +1026,10 @@
   </div>
 </section>
 
-<!-- ============== SECTION 6 — BDC Flywheel ============== -->
-<section class="section" id="architecture" data-scene="flywheel">
-  <div class="section-inner">
-    <div class="eyebrow"><span class="num">06</span>BDC flywheel</div>
-    <h2 class="h2">Three layers. One agent.</h2>
-    <p class="lede">On-prem sources feed Datasphere & Databricks; BTP runs the agent loop on top. Every layer talks the SAP-native protocol it should.</p>
-    <div class="layer-stack">
-      <div class="layer btp">
-        <div class="lyr-tag">BTP</div>
-        <div>
-          <div class="lyr-title">SBPA · SAC</div>
-          <div class="lyr-sub">Workflow · analytics</div>
-        </div>
-      </div>
-      <div class="layer bdc">
-        <div class="lyr-tag">BDC</div>
-        <div>
-          <div class="lyr-title">Datasphere + Databricks</div>
-          <div class="lyr-sub">Repair context · ML pipeline · prediction staging</div>
-        </div>
-      </div>
-      <div class="layer">
-        <div class="lyr-tag">On-prem</div>
-        <div>
-          <div class="lyr-title">S/4HANA · Historian · WMS</div>
-          <div class="lyr-sub">EQUI · MARA · AUFK · QMEL · IoT</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== SECTION 7 — Datasphere data layer ============== -->
-<section class="section" data-scene="datasphere">
-  <div class="section-inner">
-    <div class="eyebrow"><span class="num">07</span>Datasphere data layer</div>
-    <h2 class="h2">Replicated → Modeled →<br>Repair Context → Exposed.</h2>
-    <p class="lede">Four panes pulse in sequence — every event is enriched with the equipment master, material catalog and repair history before it reaches the agent.</p>
-    <div class="pane-grid">
-      <div class="pane">
-        <div class="pane-eyebrow">Pane 01</div>
-        <div class="pane-title">Replicated raw</div>
-        <div><span class="pane-chip">EQUI</span><span class="pane-chip">MARA</span><span class="pane-chip">AUFK</span></div>
-      </div>
-      <div class="pane">
-        <div class="pane-eyebrow">Pane 02</div>
-        <div class="pane-title">Dim / Fact</div>
-        <div><span class="pane-chip">D_EQUIPMENT</span><span class="pane-chip">F_WORK_ORDERS</span></div>
-      </div>
-      <div class="pane">
-        <div class="pane-eyebrow">Pane 03</div>
-        <div class="pane-title">Repair context</div>
-        <div><span class="pane-chip">QMEL</span><span class="pane-chip">PART_CATALOG</span><span class="pane-chip">FAILURE_HX</span></div>
-      </div>
-      <div class="pane">
-        <div class="pane-eyebrow">Pane 04</div>
-        <div class="pane-title">Prediction staging + OData</div>
-        <div><span class="pane-chip">PREDICTIONS</span><span class="pane-chip">OData V4</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== SECTION 8 — Databricks ML ============== -->
+<!-- ============== SECTION 6 — SAP BDC ML pipeline ============== -->
 <section class="section" data-scene="databricks">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">08</span>SAP BDC ML pipeline</div>
+    <div class="eyebrow"><span class="num">06</span>SAP BDC ML pipeline</div>
     <h2 class="h2">Bronze → Silver → Gold → Predict.</h2>
     <p class="lede">XGBoost trained on historical failure patterns; MLflow versions every model; prediction writes back to Datasphere as a particle stream.</p>
     <div class="pipeline">
@@ -1124,10 +1060,10 @@
   </div>
 </section>
 
-<!-- ============== SECTION 9 — Agentic / Phone ============== -->
+<!-- ============== SECTION 7 — Agentic / Phone ============== -->
 <section class="section" data-scene="agentic">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">09</span>Agentic layer</div>
+    <div class="eyebrow"><span class="num">07</span>Agentic layer</div>
     <h2 class="h2">One alert.<br>One tap.<br>One work order.</h2>
     <div class="grid-2" style="margin-top: 32px; gap: 60px; align-items: center;">
       <div class="phone">
@@ -1200,10 +1136,10 @@
   </div>
 </section>
 
-<!-- ============== SECTION 10 — Integration map ============== -->
-<section class="section" data-scene="integration">
+<!-- ============== SECTION 8 — Solution Architecture ============== -->
+<section class="section" id="architecture" data-scene="integration">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">10</span>Integration map</div>
+    <div class="eyebrow"><span class="num">08</span>Solution architecture</div>
     <h2 class="h2">Every protocol.<br>Every auth boundary.</h2>
     <svg class="integration-svg" viewBox="0 0 1100 480">
       <defs>
@@ -1269,45 +1205,10 @@
   </div>
 </section>
 
-<!-- ============== SECTION 11 — KPIs ============== -->
-<section class="section" id="kpis" data-scene="kpis">
-  <div class="section-inner">
-    <div class="eyebrow"><span class="num">11</span>KPIs & ROI</div>
-    <h2 class="h2">What changes<br>when the loop closes.</h2>
-    <div class="grid-5 kpi-row" style="margin-top: 16px;">
-      <div class="kpi-card glass">
-        <div class="kpi-label">RCA reduction</div>
-        <div class="kpi-value">80%</div>
-        <div class="kpi-sub">Of insight-to-action time eliminated.</div>
-      </div>
-      <div class="kpi-card glass">
-        <div class="kpi-label">NPT avoided</div>
-        <div class="kpi-value">6.5h</div>
-        <div class="kpi-sub">Per prevented event, on average.</div>
-      </div>
-      <div class="kpi-card glass">
-        <div class="kpi-label">Saved / event</div>
-        <div class="kpi-value">$48K</div>
-        <div class="kpi-sub">Direct cost avoidance per closed loop.</div>
-      </div>
-      <div class="kpi-card glass">
-        <div class="kpi-label">Auto threshold</div>
-        <div class="kpi-value">≥85%</div>
-        <div class="kpi-sub">Confidence gate to engage HITL flow.</div>
-      </div>
-      <div class="kpi-card glass">
-        <div class="kpi-label">Latency</div>
-        <div class="kpi-value">&lt;30s</div>
-        <div class="kpi-sub">Sensor signal to mobile alert.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== SECTION 12 — Go-to-Market ============== -->
+<!-- ============== SECTION 9 — Go-to-Market ============== -->
 <section class="section" id="gtm" data-scene="gtm">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">12</span>Go-to-market</div>
+    <div class="eyebrow"><span class="num">09</span>Go-to-market</div>
     <h2 class="h2">11 prospects.<br>Two industries. One motion.</h2>
     <div class="grid-2 gtm-grid">
       <div class="gtm-card glass">
@@ -1333,49 +1234,15 @@
   </div>
 </section>
 
-<!-- ============== SECTION 13 — Hack week vs Production ============== -->
-<section class="section" data-scene="scope">
-  <div class="section-inner">
-    <div class="eyebrow"><span class="num">13</span>Hack week vs full build</div>
-    <h2 class="h2">7-day POC. 4–5 week production.</h2>
-    <div class="grid-2" style="margin-top: 28px; gap: 32px;">
-      <div class="compare-col glass" data-col="poc">
-        <div class="col-tag">Hack week · POC</div>
-        <h3>Wireframe rig</h3>
-        <p class="col-time">7 days · 1 architect · 1 ML engineer</p>
-        <ul>
-          <li>Datasphere replication of EQUI / MARA / AUFK</li>
-          <li>Synthetic Bronze→Silver→Gold pipeline</li>
-          <li>Single XGBoost model on top-drive bearing wear</li>
-          <li>Mocked mobile alert + SBPA stub workflow</li>
-          <li>SAC dashboard with predicted vs actual</li>
-        </ul>
-      </div>
-      <div class="compare-col glass" data-col="prod">
-        <div class="col-tag">Production · Full build</div>
-        <h3>Filled-in rig</h3>
-        <p class="col-time">4–5 weeks · multidisciplinary squad</p>
-        <ul>
-          <li>Live ODP/CDS replication from production S/4HANA</li>
-          <li>Multi-asset model registry · MLflow staging→prod</li>
-          <li>HITL + Autonomous + Watch threshold gating</li>
-          <li>End-to-end SBPA: WO, parts, technician, audit</li>
-          <li>SAC executive view + MTBF / MTTR retraining loop</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============== SECTION 14 — Summary & Impact ============== -->
+<!-- ============== SECTION 10 — Summary & Impact ============== -->
 <section class="section" id="summary" data-scene="summary">
   <div class="section-inner">
-    <div class="eyebrow"><span class="num">14</span>Summary & impact</div>
+    <div class="eyebrow"><span class="num">10</span>Summary & impact</div>
     <h2 class="h2">Reactive telemetry.<br><span class="grad">Autonomous execution.</span></h2>
     <p class="lede">Rig-Guard automates the end-to-end maintenance lifecycle, transforming reactive telemetry into proactive, autonomous SAP S/4HANA execution.</p>
     <div class="grid-3 impact-row" style="margin-top: 32px;">
       <div class="impact-tile glass">
-        <div class="impact-value">95%</div>
+        <div class="impact-value">97%</div>
         <div class="impact-label">Model accuracy</div>
         <div class="impact-sub">Precision across historical asset telemetry.</div>
       </div>

@@ -163,19 +163,15 @@
     meet:        { p: [8, 5, 9],     l: [0, 2.4, 0] },  // reset
     loop:        { p: [0, 9, 11],    l: [0, 2.4, 0] },  // high orbit reveal
     modes:       { p: [9, 4, 7],     l: [0, 2.4, 0] },  // 3/4 right
-    flywheel:    { p: [0, 14, 14],   l: [0, 4, 0] },    // pull back exploded
-    datasphere:  { p: [-3, 6, 9],    l: [0, 3, 0] },    // zoom to BDC area
     databricks:  { p: [6, 5, 7],     l: [0, 2.6, 0] },  // slide right
     agentic:     { p: [10, 3.5, 6],  l: [0, 2.5, 0] },  // close, side
     integration: { p: [0, 11, 16],   l: [0, 3.5, 0] },  // pull all the way out
-    kpis:        { p: [6, 3.5, 8],   l: [0, 2.3, 0] },  // frame KPIs at base
     gtm:         { p: [-6, 4, 9],    l: [0, 2.6, 0] },  // partner-side wide
-    scope:       { p: [-8, 5, 8],    l: [0, 2.6, 0] },  // side
     summary:     { p: [0, 7, 11],    l: [0, 3, 0] },    // ceremonial pull-back
     cta:         { p: [8, 5, 9],     l: [0, 2.4, 0] },  // rest
   };
 
-  const SCENE_LIST = ['hero','crisis','gap','meet','loop','modes','flywheel','datasphere','databricks','agentic','integration','kpis','gtm','scope','summary','cta'];
+  const SCENE_LIST = ['hero','crisis','gap','meet','loop','modes','databricks','agentic','integration','gtm','summary','cta'];
 
   // build scroll rail
   const rail = document.getElementById('scrollRail');
@@ -226,7 +222,7 @@
       targetCam.l.set(...cam.l);
       // update nav active
       document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-      const navMap = { problem:['crisis','gap'], loop:['loop'], modes:['modes'], architecture:['flywheel','datasphere','databricks','agentic','integration'], kpis:['kpis','gtm','scope','summary','cta'] };
+      const navMap = { problem:['crisis','gap'], loop:['loop'], modes:['modes'], architecture:['databricks','agentic','integration','gtm','summary','cta'] };
       Object.entries(navMap).forEach(([href, scenes]) => {
         if (scenes.includes(scene)) {
           const a = document.querySelector(`.nav-links a[href="#${href}"]`);
