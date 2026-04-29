@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Rig-Guard · Color Palette</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg-deep);
+    color: var(--text-hi);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100%;
+  }
+  body {
+    padding: 48px clamp(24px, 5vw, 64px) 80px;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(46,111,232,0.10), transparent 70%),
+      var(--bg-deep);
+  }
+
+  header {
+    max-width: 1280px; margin: 0 auto 40px;
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    background: var(--grad);
+    border-radius: 8px; position: relative;
+    box-shadow: 0 0 28px rgba(63,200,228,0.4);
+  }
+  .brand-mark::after {
+    content: ""; position: absolute; inset: 8px;
+    background: var(--bg-primary); border-radius: 3px;
+  }
+  .brand-mark::before {
+    content: ""; position: absolute; left: 50%; top: 5px; bottom: 5px;
+    width: 2px; transform: translateX(-50%);
+    background: linear-gradient(180deg, transparent, #fff, transparent);
+  }
+  .brand-name {
+    font-weight: 700; letter-spacing: -0.01em; font-size: 20px;
+  }
+  .brand-sub {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--text-lo);
+    margin-top: 2px;
+  }
+  .header-meta {
+    font-size: 12px; color: var(--text-lo);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+  }
+  .header-meta a { color: var(--cyan-400); text-decoration: none; }
+  .header-meta a:hover { text-decoration: underline; }
+
+  /* Section */
+  section { max-width: 1280px; margin: 0 auto 44px; }
+  .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 16px; margin-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+  }
+  .section-head h2 {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--text-mid);
+  }
+  .section-head .hint {
+    font-size: 11px; color: var(--text-lo);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+  }
+
+  /* Swatch card */
+  .swatch {
+    display: flex; flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-elev-1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 200ms var(--ease), border-color 200ms var(--ease), box-shadow 200ms var(--ease);
+    position: relative;
+    text-align: left;
+    font: inherit; color: inherit;
+    user-select: none;
+  }
+  .swatch:hover {
+    transform: translateY(-2px);
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 1px rgba(46,111,232,0.2), 0 12px 32px rgba(0,0,0,0.45), 0 0 24px rgba(63,200,228,0.12);
+  }
+  .swatch:focus-visible {
+    outline: none;
+    border-color: var(--cyan-400);
+    box-shadow: 0 0 0 2px rgba(63,200,228,0.5);
+  }
+  .swatch.copied { border-color: var(--cyan-400); }
+
+  .chip-fill {
+    height: 110px;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+  .chip-fill::after {
+    content: "";
+    position: absolute; left: 14px; top: 14px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+  }
+
+  .chip-meta {
+    padding: 12px 14px 14px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .chip-token {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--text-lo);
+  }
+  .chip-name {
+    font-size: 14px; font-weight: 600;
+    color: var(--text-hi);
+    line-height: 1.25;
+  }
+  .chip-hex {
+    margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 500;
+    color: var(--text-mid);
+    letter-spacing: 0.04em;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px;
+  }
+  .chip-hex .cta {
+    font-size: 9px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-lo);
+    transition: color 200ms var(--ease);
+  }
+  .swatch:hover .chip-hex .cta { color: var(--cyan-400); }
+
+  /* Special big swatch for the gradient */
+  .swatch.wide { grid-column: span 2; }
+  .swatch.wide .chip-fill { height: 140px; }
+  @media (max-width: 540px) { .swatch.wide { grid-column: span 1; } }
+
+  /* Toast */
+  .toast {
+    position: fixed; left: 50%; bottom: 28px;
+    transform: translate(-50%, 20px);
+    padding: 10px 16px;
+    background: rgba(11, 26, 58, 0.92);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--cyan-400);
+    border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; color: var(--text-hi);
+    letter-spacing: 0.04em;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5), 0 0 24px rgba(63,200,228,0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 200ms var(--ease), transform 200ms var(--ease);
+    z-index: 100;
+  }
+  .toast.in {
+    opacity: 1; transform: translate(-50%, 0);
+  }
+  .toast .check {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--grad);
+    margin-right: 8px;
+    font-size: 9px; font-weight: 700; color: #fff;
+  }
+
+  /* Per-scene mapping table */
+  .map {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-elev-1);
+  }
+  table.map-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px;
+  }
+  table.map-table th, table.map-table td {
+    text-align: left;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+  table.map-table th {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--text-lo);
+    background: rgba(11,26,58,0.4);
+  }
+  table.map-table tr:last-child td { border-bottom: none; }
+  table.map-table .scene-name { font-weight: 600; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-elev-2);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: border-color 200ms var(--ease);
+  }
+  .pill:hover { border-color: var(--cyan-400); }
+  .pill .swatch-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+
+  footer {
+    max-width: 1280px; margin: 0 auto;
+    padding-top: 32px;
+    border-top: 1px solid var(--line);
+    font-size: 11px; color: var(--text-lo);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em;
+    display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark"></div>
+    <div>
+      <div class="brand-name">Rig-Guard · Color Palette</div>
+      <div class="brand-sub">Click any swatch to copy its hex code</div>
+    </div>
+  </div>
+  <div class="header-meta">
+    Source · <a href="tokens.css">tokens.css</a>
+  </div>
+</header>
+
+<!-- Signature gradient -->
+<section>
+  <div class="section-head">
+    <h2>Signature gradient</h2>
+    <span class="hint">linear-gradient(135deg, #2E6FE8 0%, #3FC8E4 100%)</span>
+  </div>
+  <div class="grid">
+    <button class="swatch wide" data-copy="linear-gradient(135deg, #2E6FE8 0%, #3FC8E4 100%)">
+      <div class="chip-fill" style="background: linear-gradient(135deg, #2E6FE8 0%, #3FC8E4 100%); box-shadow: inset 0 0 64px rgba(63,200,228,0.4);"></div>
+      <div class="chip-meta">
+        <span class="chip-token">--grad</span>
+        <span class="chip-name">Brand gradient · 135°</span>
+        <span class="chip-hex"><span>#2E6FE8 → #3FC8E4</span><span class="cta">copy css</span></span>
+      </div>
+    </button>
+  </div>
+</section>
+
+<!-- Backgrounds -->
+<section>
+  <div class="section-head">
+    <h2>Backgrounds · deep → elevated</h2>
+    <span class="hint">--bg-* · 5 steps</span>
+  </div>
+  <div class="grid" id="grid-bg"></div>
+</section>
+
+<!-- Lines & strokes -->
+<section>
+  <div class="section-head">
+    <h2>Lines &amp; strokes</h2>
+    <span class="hint">hairlines · borders</span>
+  </div>
+  <div class="grid" id="grid-line"></div>
+</section>
+
+<!-- Brand accents -->
+<section>
+  <div class="section-head">
+    <h2>Brand accents</h2>
+    <span class="hint">blues · cyan · aqua · teal</span>
+  </div>
+  <div class="grid" id="grid-accent"></div>
+</section>
+
+<!-- Text -->
+<section>
+  <div class="section-head">
+    <h2>Text</h2>
+    <span class="hint">--text-hi / mid / lo</span>
+  </div>
+  <div class="grid" id="grid-text"></div>
+</section>
+
+<!-- Status -->
+<section>
+  <div class="section-head">
+    <h2>Status</h2>
+    <span class="hint">ok · warn · danger</span>
+  </div>
+  <div class="grid" id="grid-status"></div>
+</section>
+
+<!-- Slate -->
+<section>
+  <div class="section-head">
+    <h2>Slate steps</h2>
+    <span class="hint">--slate-1 → --slate-9</span>
+  </div>
+  <div class="grid" id="grid-slate"></div>
+</section>
+
+<!-- Per-scene mapping -->
+<section>
+  <div class="section-head">
+    <h2>Per-scene mapping</h2>
+    <span class="hint">what each loop HTML actually uses</span>
+  </div>
+  <div class="map">
+    <table class="map-table">
+      <thead>
+        <tr>
+          <th>Loop</th>
+          <th>Caption dot</th>
+          <th>Accent text</th>
+          <th>Title gradient terminus</th>
+          <th>Mood</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="scene-name">loop-hero</td>
+          <td><button class="pill" data-copy="#3FC8E4"><span class="swatch-dot" style="background:#3FC8E4"></span>#3FC8E4</button></td>
+          <td><button class="pill" data-copy="#3FC8E4"><span class="swatch-dot" style="background:#3FC8E4"></span>#3FC8E4</button></td>
+          <td><button class="pill" data-copy="#4FE0D2"><span class="swatch-dot" style="background:#4FE0D2"></span>#4FE0D2</button></td>
+          <td>Cyan calm · always-on</td>
+        </tr>
+        <tr>
+          <td class="scene-name">loop-mode-a</td>
+          <td><button class="pill" data-copy="#F59E0B"><span class="swatch-dot" style="background:#F59E0B"></span>#F59E0B</button></td>
+          <td><button class="pill" data-copy="#F59E0B"><span class="swatch-dot" style="background:#F59E0B"></span>#F59E0B</button></td>
+          <td><button class="pill" data-copy="#F59E0B"><span class="swatch-dot" style="background:#F59E0B"></span>#F59E0B</button></td>
+          <td>Amber alert · HITL</td>
+        </tr>
+        <tr>
+          <td class="scene-name">loop-mode-b</td>
+          <td><button class="pill" data-copy="#3FC8E4"><span class="swatch-dot" style="background:#3FC8E4"></span>#3FC8E4</button></td>
+          <td><button class="pill" data-copy="#3FC8E4"><span class="swatch-dot" style="background:#3FC8E4"></span>#3FC8E4</button></td>
+          <td><button class="pill" data-copy="#3FC8E4"><span class="swatch-dot" style="background:#3FC8E4"></span>#3FC8E4</button></td>
+          <td>Cyan confident · autonomous</td>
+        </tr>
+        <tr>
+          <td class="scene-name">loop-watch</td>
+          <td><button class="pill" data-copy="#7B8CAE"><span class="swatch-dot" style="background:#7B8CAE"></span>#7B8CAE</button></td>
+          <td><button class="pill" data-copy="#7B8CAE"><span class="swatch-dot" style="background:#7B8CAE"></span>#7B8CAE</button></td>
+          <td><button class="pill" data-copy="#7B8CAE"><span class="swatch-dot" style="background:#7B8CAE"></span>#7B8CAE</button></td>
+          <td>Slate quiet · logged only</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<footer>
+  <span>RIG-GUARD · TRACK B · SAP HACK2BUILD 2026</span>
+  <span>tap any swatch · clipboard ready</span>
+</footer>
+
+<div class="toast" id="toast"><span class="check">✓</span><span id="toastText">Copied #000000</span></div>
+
+<script>
+  const PALETTE = {
+    bg: [
+      { token: '--bg-deep',    name: 'Page void',         hex: '#050B1E' },
+      { token: '--bg-primary', name: 'Topbar / canvas',   hex: '#0A1430' },
+      { token: '--bg-elev-1',  name: 'Glass · low',       hex: '#0B1A3A' },
+      { token: '--bg-elev-2',  name: 'Glass · mid',       hex: '#0F1C44' },
+      { token: '--bg-elev-3',  name: 'Steel material',    hex: '#13234F' },
+    ],
+    line: [
+      { token: '--line',   name: 'Hairlines',  hex: '#1B2F66' },
+      { token: '--stroke', name: 'Ghost border', hex: '#2A3758' },
+    ],
+    accent: [
+      { token: '--blue-500', name: 'Brand blue',    hex: '#2E6FE8' },
+      { token: '--blue-600', name: 'Deep blue',     hex: '#2E4FAE' },
+      { token: '--blue-700', name: 'Deeper blue',   hex: '#243E85' },
+      { token: '--cyan-400', name: 'Signature cyan · primary glow', hex: '#3FC8E4' },
+      { token: '--aqua-300', name: 'Aqua · particles', hex: '#4FE0D2' },
+      { token: '--teal-600', name: 'Teal · dark',   hex: '#0891A6' },
+    ],
+    text: [
+      { token: '--text-hi',  name: 'Foreground',    hex: '#FFFFFF' },
+      { token: '--text-mid', name: 'Body',          hex: '#CDD4E4' },
+      { token: '--text-lo',  name: 'Muted · labels', hex: '#7B8CAE' },
+    ],
+    status: [
+      { token: '--ok',     name: 'Success',  hex: '#10B981' },
+      { token: '--warn',   name: 'Mode A · HITL alert', hex: '#F59E0B' },
+      { token: '--danger', name: 'Critical', hex: '#EF4444' },
+    ],
+    slate: [
+      { token: '--slate-1', hex: '#5C6A8A' },
+      { token: '--slate-2', hex: '#6A789A' },
+      { token: '--slate-3', hex: '#8A96B3' },
+      { token: '--slate-4', hex: '#9AA8C9' },
+      { token: '--slate-5', hex: '#B7C0D6' },
+      { token: '--slate-6', hex: '#E4E8F2' },
+      { token: '--slate-7', hex: '#E7ECF7' },
+      { token: '--slate-8', hex: '#F4F6FB' },
+      { token: '--slate-9', hex: '#F9FAFD' },
+    ],
+  };
+
+  function makeSwatch(c) {
+    const btn = document.createElement('button');
+    btn.className = 'swatch';
+    btn.dataset.copy = c.hex;
+    btn.innerHTML = `
+      <div class="chip-fill" style="background:${c.hex};"></div>
+      <div class="chip-meta">
+        <span class="chip-token">${c.token}</span>
+        <span class="chip-name">${c.name || c.token}</span>
+        <span class="chip-hex"><span>${c.hex}</span><span class="cta">click to copy</span></span>
+      </div>
+    `;
+    return btn;
+  }
+
+  function fillGrid(id, items) {
+    const el = document.getElementById(id);
+    items.forEach(it => el.appendChild(makeSwatch(it)));
+  }
+  fillGrid('grid-bg',     PALETTE.bg);
+  fillGrid('grid-line',   PALETTE.line);
+  fillGrid('grid-accent', PALETTE.accent);
+  fillGrid('grid-text',   PALETTE.text);
+  fillGrid('grid-status', PALETTE.status);
+  fillGrid('grid-slate',  PALETTE.slate);
+
+  // Copy on click
+  const toast = document.getElementById('toast');
+  const toastText = document.getElementById('toastText');
+  let toastTimer;
+
+  async function copyToClipboard(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (e) {
+      // Fallback
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (_) {}
+      document.body.removeChild(ta);
+      return ok;
+    }
+  }
+
+  function showToast(msg) {
+    toastText.textContent = msg;
+    toast.classList.add('in');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('in'), 1500);
+  }
+
+  document.body.addEventListener('click', async (e) => {
+    const t = e.target.closest('[data-copy]');
+    if (!t) return;
+    const val = t.dataset.copy;
+    const ok = await copyToClipboard(val);
+    if (ok) {
+      t.classList.add('copied');
+      setTimeout(() => t.classList.remove('copied'), 600);
+      showToast('Copied ' + val);
+    } else {
+      showToast('Copy failed — select & copy manually');
+    }
+  });
+
+  // Keyboard accessibility
+  document.body.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && document.activeElement.matches('[data-copy]')) {
+      e.preventDefault();
+      document.activeElement.click();
+    }
+  });
+</script>
+
+</body>
+</html>
