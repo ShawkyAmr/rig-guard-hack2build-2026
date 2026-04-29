@@ -1232,7 +1232,7 @@
         <!-- historian -->
         <rect x="40" y="260" width="200" height="60" rx="10" fill="rgba(15,28,68,0.6)" stroke="#1B2F66"/>
         <text x="60" y="286" fill="#7B8CAE" font-size="10" font-weight="600" letter-spacing="2">HISTORIAN</text>
-        <text x="60" y="306" fill="#fff" font-size="14" font-weight="600">IoT telemetry · 10 Hz</text>
+        <text x="60" y="306" fill="#fff" font-size="14" font-weight="600">IoT / Sensor Data</text>
 
         <!-- BDC (Datasphere + Databricks + SAC) -->
         <rect x="420" y="70" width="240" height="300" rx="14" fill="rgba(46,111,232,0.06)" stroke="#2E6FE8"/>
@@ -1253,7 +1253,8 @@
         <g fill="none" stroke="url(#iGrad)" stroke-width="1.5">
           <path class="iflow-line" d="M 240 150 C 320 150 360 170 420 170"/>
           <path class="iflow-line" d="M 240 290 C 320 290 360 230 420 230"/>
-          <path class="iflow-line" d="M 660 220 C 720 220 780 220 840 220"/>
+          <!-- Databricks → BTP · SBPA -->
+          <path class="iflow-line" d="M 660 200 C 720 200 780 220 840 220" stroke-width="2"/>
 
           <!-- return loop: SBPA → S/4 -->
           <path class="iflow-line" d="M 840 250 C 540 360 320 250 240 165" stroke="#F59E0B"/>
@@ -1283,7 +1284,6 @@
     <div class="demo-ticker">
       <div class="demo-tick">Sensor breach</div>
       <div class="demo-tick">Prediction</div>
-      <div class="demo-tick">Joule alert</div>
       <div class="demo-tick">SBPA workflow</div>
       <div class="demo-tick">WO executed</div>
     </div>
